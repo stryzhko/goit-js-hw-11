@@ -21,13 +21,19 @@ p {margin: 0;}
 	padding: 5px;
 }
 .search-form button {
+	cursor: pointer;
 	color: white;
 	width: 120px;
 	padding: 5px;
 	border-width: 0;
 	border-radius: 20;
-	background-color: rgb(6, 36, 169);
+	background-color: rgb(21, 54, 200);
 }
+.search-form button:hover,
+.search-form button:focus{
+	background-color: rgb(7, 37, 171);
+}
+
 
 .gallery{
 	display: flex;
@@ -60,10 +66,15 @@ p {margin: 0;}
 	width: 100px;
 	padding: 5px;
 	border-width: 0;
-	border-radius: 5;
+	border-radius: 20;
 	background-color: rgba(6, 36, 169, 0.727);
 	color: white;
+	cursor: pointer;
 	
+}
+.load-more:hover,
+.load-more:focus {
+  background: #2028bf;
 }
 .is-hidden.load-more{
 	display: none;
