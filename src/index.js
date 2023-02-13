@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
 // Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -6,8 +6,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import _debounce from 'lodash.debounce';
 
-const BASE_URL = 'https://pixabay.com/api/';
-const KEY_URL = '33581671-7d6695e1fa0aa9e5b0a79d79d';
+import { getFetchImage } from './js/fetchImage';
 
 const refs = {
   input: document.querySelector('.search-form').searchQuery,
@@ -19,40 +18,30 @@ const refs = {
 
 refs.form.addEventListener('submit', onSearh);
 refs.input.addEventListener('input', _debounce(onInputSearch, 300));
-refs.loadMore.addEventListener('click', LoadMore);
+refs.loadMore.addEventListener('click', loadMore);
 
 let searchText = '';
 let markUpCards = [];
 let page = 1;
+
 const ligthbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
   scrollZoom: false,
 });
 
-console.log(searchText);
-
-async function getFetch() {
-  try {
-    const responce = await axios.get(
-      `${BASE_URL}?key=${KEY_URL}&q=${searchText}&page=${page}&per_page=40&image_type=photo&orientation=horizontal&safesearch=true`
-    );
-
-    // console.log(responce);
-    return responce;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 function onInputSearch(e) {
-  searchText = e.target.value;
+   searchText = e.target.value;
+  
 }
-
-async function LoadMore() {
+console.log(searchText);
+async function loadMore() {
   page += 1;
-  const { data } = await getFetch();
+//   console.log(page);
+  const  data  = await getFetchImage(searchText, page);
   if (data.hits.length === 0) {
+    refs.loadMore.classList.add('is-hidden');
     return Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
@@ -63,7 +52,7 @@ async function LoadMore() {
 
 async function onSearh(e) {
   e.preventDefault();
-  const { data } = await getFetch();
+  const data = await getFetchImage(searchText, page);
   page = 1;
   clearRender();
   if (data.hits.length === 0) {
